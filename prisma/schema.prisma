@@ -20,7 +20,7 @@ enum Role{
 }
 
 enum Priority{
-  Heigh
+  HEIGH
   MEDIUM
   LOW
 }
@@ -62,7 +62,7 @@ model Task{
   id String @id @default(uuid())
   user_id String
   user User @relation(fields: [user_id], references: [id])
-  title String
+  title String @unique
   description String
   priority Priority @default(MEDIUM)
   due_date DateTime
