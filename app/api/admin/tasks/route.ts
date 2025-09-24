@@ -70,7 +70,7 @@ export async function GET(request: NextRequest) {
     const members = url.searchParams.get('members');
     const subTasks = url.searchParams.get('subTask');
 
-    // get the singl task
+    // get the single task
     if (taskId) {
       const task = await prisma.task.findUnique({
         where: { id: taskId },
