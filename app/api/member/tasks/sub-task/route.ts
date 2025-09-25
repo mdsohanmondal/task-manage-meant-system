@@ -7,7 +7,7 @@ export async function GET(request: NextRequest) {
     const memberId = url.searchParams.get('memberId');
     const assinged = url.searchParams.get('assinged');
     const subTasks = await prisma.subTask.findMany({
-      include: { assinged: assinged === 'true' && true },
+      include: { assinged: assinged === 'true' && true, task: true },
     });
     const memberSubtask = subTasks.filter(
       (item) => item.assinged_id === memberId

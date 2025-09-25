@@ -66,9 +66,10 @@ export async function POST(request: NextRequest) {
 export async function GET(request: NextRequest) {
   try {
     const url = new URL(request.url);
-    const taskId = url.searchParams.get('taskId');
-    const members = url.searchParams.get('members');
-    const subTasks = url.searchParams.get('subTask');
+    const taskId: string | null = url.searchParams.get('taskId');
+    const members: string | null = url.searchParams.get('members');
+    const subTasks: string | null = url.searchParams.get('subTask');
+    const comments: string | null = url.searchParams.get('comments');
 
     // get the single task
     if (taskId) {
@@ -77,6 +78,7 @@ export async function GET(request: NextRequest) {
         include: {
           assign_members: members === 'true' && true,
           sub_tasks: subTasks === 'true' && true,
+          comments: comments === 'true' && true,
         },
       });
       return NextResponse.json({ task }, { status: 200 });
@@ -87,6 +89,7 @@ export async function GET(request: NextRequest) {
         include: {
           assign_members: members === 'true' && true,
           sub_tasks: subTasks === 'true' && true,
+          comments: comments === 'true' && true,
         },
       });
       return NextResponse.json({ tasks: allTasks }, { status: 200 });
