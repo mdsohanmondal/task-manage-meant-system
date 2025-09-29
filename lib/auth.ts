@@ -1,6 +1,7 @@
 import prisma from '@/app/utils/prismaClient';
 import { NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
+import GoogleProvider from 'next-auth/providers/google';
 export const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
@@ -32,8 +33,34 @@ export const authOptions: NextAuthOptions = {
         }
       },
     }),
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID!,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+    }),
   ],
   callbacks: {
+    async signIn({ user, account }) {
+      try {
+        if (account?.provider === 'google') {
+          const isExistUser = await prisma.user.findUnique({
+            where: { email: user.email! },
+          });
+          if (!isExistUser) {
+            await prisma.user.create({
+              data: {
+                email: user.email!,
+                username: user.name!,
+                avatar: user.image,
+              },
+            });
+          }
+        }
+        return true;
+      } catch (er) {
+        console.log(er);
+        return false;
+      }
+    },
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
@@ -49,10 +76,10 @@ export const authOptions: NextAuthOptions = {
       return session;
     },
   },
+  secret: process.env.NEXT_SECRET,
 
   pages: {
     signIn: '/',
     signOut: '/',
   },
-  secret: process.env.NEXT_SECRET,
 };

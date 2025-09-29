@@ -82,6 +82,11 @@ const SignUpPage = () => {
       console.log(error);
     }
   };
+
+  const handleSigninGoogle = async () => {
+    const data = await signIn('google', { redirect: false });
+    console.log('Google Login Data: ', data);
+  };
   return (
     <div className="w-full h-screen bg-zinc-900 text-white flex items-center justify-center gap-40 px-20 py-10">
       <div className="left-side h-full flex items-center justify-center">
@@ -123,7 +128,11 @@ const SignUpPage = () => {
         <Typography2 className="mt-3 text-blue-400">
           Create an Account
         </Typography2>
-        <Button variant={'secondary'} className="cursor-pointer mt-10">
+        <Button
+          onClick={handleSigninGoogle}
+          variant={'secondary'}
+          className="cursor-pointer mt-10"
+        >
           <GoogleIcon />
           continue with google
         </Button>
