@@ -12,11 +12,12 @@ import { ArrowLeft, User } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 
 const UsersPage = () => {
-  const [userLists, setUserLists] = useState(null);
+  const [userLists, setUserLists] = useState<Response | null>(null);
   useEffect(() => {
     const fetchUsers = async function () {
-      const userData = await getUsers();
-      setUserLists(userData);
+      const userData = await fetch(`http://localhost:3000/api/admin/users`);
+      const jsData = await userData?.json();
+      setUserLists(jsData);
     };
     fetchUsers();
   }, []);
